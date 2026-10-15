@@ -2,6 +2,8 @@
 
 Commit/reveal probability accounting with independently evidence-resolved, integer Brier scores. An experimental GenLayer primitive, not a financial market, certificate issuer, or factual-truth oracle.
 
+Live StudioNet contract: [`0xdD085aa0d0074D4f2c4cf0b8071A9D0860be8a79`](https://explorer-studio.genlayer.com/address/0xdD085aa0d0074D4f2c4cf0b8071A9D0860be8a79). [Proof matrix](LIVE_PROOFS.md): 14 finalized transactions, 12 successful executions and 2 expected rejections. [Portal submission](SUBMISSION.md).
+
 ## Problem and consensus boundary
 
 A forecast recorder can seal probabilities but cannot interpret an ambiguous published outcome document. A private AI judge could pick an outcome alone. Here authenticated participants seal their probabilities first; GenLayer independently acquires the exact documents and agrees on the consequential interpretation before accounting changes.
@@ -80,7 +82,7 @@ npm ci --ignore-scripts
 npm run test:sdk
 ```
 
-Tests include all 9 semantic vectors; authenticated two-participant scoring; wrong probability/salt/principal/round; replay; exact deadlines; missing commits/reveals; permanently unavailable resolution; bad HTTP/hash/encoding/size; actual validator callback disagreement; all 10001 probability values and integer properness identities. Direct-mode mocks are not distributed consensus proofs. The narrow Windows cleanup fixture fixes gltest's open-temporary-file unlink only.
+43 tests include all 9 semantic vectors; authenticated two-participant scoring; wrong probability/salt/principal/round; replay; exact deadlines; missing commits/reveals; permanently unavailable resolution; bad HTTP/hash/encoding/size; malformed AI output; actual validator callback disagreement; forged post-consensus reports; all 10001 probability values and integer properness identities. Direct-mode mocks are not distributed consensus proofs. The narrow Windows cleanup fixture fixes gltest's open-temporary-file unlink only.
 
 ## Deploy and interact
 
@@ -97,6 +99,8 @@ genlayer schema CONTRACT_ADDRESS
 StudioNet is the gasless test environment. Account creation/unlock use native encrypted keystore/OS vault; never paste keys or passwords into Git/chat. The first contract line pins the GenVM runner. After deployment, inspect execution SUCCESS **and** lifecycle FINALIZED; an accepted/finalized execution error does not create a contract.
 
 For the dedicated demonstration signer, `scripts/demo.mjs STEP ADDRESS FIXTURE_COMMIT` sends exactly one documented step. Set `BELIEF_TEST_ACCOUNT` and `BELIEF_CLI_PATH` to an unlocked dedicated native CLI account and CLI entrypoint. Steps: `open-good`, `commit-good`, `wrong-reveal` (expected error), `reveal-good`, `resolve-good`, `replay-good` (expected error); `open-void`, `commit-void`, `reveal-void`, `resolve-void`; `open-missing`, `commit-missing`, then `resolve-missing` only after its two 60-second windows. Demo salts live in the OS vault, not files. Other signers should build their own canonical commitments; the demo helper is intentionally limited to the documented public signer.
+
+A solitary hexadecimal roster address is automatically coerced to typed Address by CLI 0.39.2, but `participants` is a string API. The demo sends its public address in base64; the contract normalizes it to the same checksummed address. Multi-address rosters are `|`-delimited strings. This is calldata encoding, not an authorization exception. An earlier failed creation with typed Address calldata is excluded from the proof lifecycle.
 
 `scripts/run-cli.cjs` selects account/network process-locally, uses only already-signed transaction bytes, deduplicates identical broadcasts and suppresses unsafe raw receipt/config output. A timeout/network error is uncertain: inspect the known hash/history before **any** resubmission. Never treat CLI exit zero as execution evidence.
 

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import {createClient} from 'genlayer-js';
 import {studionet} from 'genlayer-js/chains';
+import {CalldataAddress} from 'genlayer-js/types';
 export const canonical=x=>x===null||typeof x!=='object'?JSON.stringify(x).replace(/[\u007f-\uffff]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0')):
  Array.isArray(x)?'['+x.map(canonical).join(',')+']':'{'+Object.keys(x).sort().map(k=>canonical(k)+':'+canonical(x[k])).join(',')+'}';
 export const sha=x=>crypto.createHash('sha256').update(x).digest('hex');
@@ -58,7 +59,8 @@ if(process.argv[1]?.endsWith('check.mjs'))try{
   const summary={...record,final:record.final?{...record.final,report:{...record.final.report,sources:record.final.report.sources.map(({body,...rest})=>rest)}}:null};
   console.log(JSON.stringify({verified:true,record:summary}));
  }else if(mode==='stats'){
-  const stats=await read(value,'get_stats',[extra,process.argv[5]]);
+  const typed=x=>new CalldataAddress(Buffer.from(x.slice(2),'hex'));
+  const stats=await read(value,'get_stats',[typed(extra),typed(process.argv[5])]);
   if(stats.pending!==stats.committed-stats.scored-stats.voided||stats.score_sum+stats.loss_sum!==stats.scored*100000000)throw Error('Aggregate conservation');
   console.log(JSON.stringify({verified:true,creator:extra,participant:process.argv[5],stats}));
  }else throw Error('Unknown check mode');

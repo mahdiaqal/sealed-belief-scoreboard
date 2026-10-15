@@ -1,0 +1,106 @@
+{
+  "address": "0xdD085aa0d0074D4f2c4cf0b8071A9D0860be8a79",
+  "fixture_commit": "097dde704ca5d2b9e9596da61238936469c82306",
+  "transactions": [
+    {
+      "step": "deploy",
+      "hash": "0x406d93c8b4f7920027b10fdb7aadeb972388f460fd3aa3bdb051771368065f35",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "open-missing",
+      "hash": "0xbdb5ab758a17feb3e2a75073ac95c2e61161b053ce6c39f41387524ab8c0670b",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "commit-missing",
+      "hash": "0xbb58f685528ac3ba2e267467794e073e98e5daac4e8a853f1dd5c12145b2c545",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "open-good",
+      "hash": "0x1dd2a600dff6ccdb3b69cc3172a1263dbaeb3ce10fcf59a90f3c98f2207a9f97",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "commit-good",
+      "hash": "0x3add9be490302aaa6c33cefc9ba32932c18078787488a8df37a7c45e05a46538",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "wrong-reveal",
+      "hash": "0x3e906c7d2288e12d3539704e80d7056c9b11e8c4c5fb33db4a73e1939522a298",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "consensus": "MAJORITY_AGREE",
+      "expected_error": "Reveal commitment mismatch"
+    },
+    {
+      "step": "reveal-good",
+      "hash": "0xcb06a47a8f7582862c9dfc41f94d65aa80b6c3e858dd16646563768daf8d1e6e",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "resolve-good",
+      "hash": "0xab362c2afb9253840e34be5a2710ca1d015f115b003ee39fc8b5b8fd7c5b138b",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "replay-good",
+      "hash": "0x486149f47076f4a8c88e2a1f9e3deee23b26aa5c55330ded48b88d9a5053295d",
+      "status": "FINALIZED",
+      "execution": "ERROR",
+      "consensus": "MAJORITY_AGREE",
+      "expected_error": "Round terminal"
+    },
+    {
+      "step": "open-void",
+      "hash": "0x9526e8819437b7282ace7146ce15913d8de781d72bec09510d1dffcbcb3895d1",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "commit-void",
+      "hash": "0x0341d201c42cd322cf24ba68efabe239a29a0b62642319c8ac473d630e318a3a",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "reveal-void",
+      "hash": "0xe604dd9de8b5a2682d0063c2c38d4de8bbc5a932e81a7a3b2ce200f4c36edfeb",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "resolve-void",
+      "hash": "0x22547eb8686256b2696f17e5d5e5f3bea708b0527a7fc20fedba1356a77f6b0c",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    },
+    {
+      "step": "resolve-missing",
+      "hash": "0xe69932813134179a2f11ea143a754bf84fbccb98111c54632f0da681aba5b98b",
+      "status": "FINALIZED",
+      "execution": "SUCCESS",
+      "consensus": "MAJORITY_AGREE"
+    }
+  ]
+}

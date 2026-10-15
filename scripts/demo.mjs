@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import {createRequire} from 'node:module';
 import {spawnSync} from 'node:child_process';
 import {digest,read,sha} from './check.mjs';
+try {
 const [mode,address,commit]=process.argv.slice(2);
 const creator='0x7a413BB4AB62E31d62d4cD9efC8C8a8Dae37FB42';
 if(!/^0x[0-9a-fA-F]{40}$/.test(address??'')||! /^[0-9a-f]{40}$/.test(commit??''))throw Error('Contract and fixture commit required');
@@ -13,7 +14,9 @@ const variant=mode.endsWith('void')?'void':mode.endsWith('missing')?'missing':'g
 const nonce='demo-'+variant,round=digest({contract:address,creator,nonce}),vault=address+':'+nonce;
 let args;
 if(mode.startsWith('open-')){
- args=['open_round',[nonce,'Do these archive rules permit automated bulk downloading without prior approval?',creator,
+ // CLI coerces a solitary hex address to a typed Address. The API expects a roster STRING;
+ // base64 is a supported Address input inside the contract and preserves string calldata here.
+ args=['open_round',[nonce,'Do these archive rules permit automated bulk downloading without prior approval?',Buffer.from(creator.slice(2),'hex').toString('base64'),
   variant==='missing'?60:3600,variant==='missing'?60:3600,'mahdiaqal','sealed-belief-scoreboard',commit,
   'examples/archive-policy.txt',variant==='void'?'f'.repeat(64):sha(fs.readFileSync('examples/archive-policy.txt')),
   'examples/archive-faq.txt',sha(fs.readFileSync('examples/archive-faq.txt'))]];
@@ -38,3 +41,7 @@ if(mode.startsWith('open-')){
 console.log(JSON.stringify({mode,round_id:round}));
 const result=spawnSync(process.execPath,['scripts/run-cli.cjs','write',address,args[0],'--args',...args[1].map(String)],{windowsHide:true,stdio:'inherit'});
 process.exitCode=result.status??1;
+} catch {
+ console.error('Sanitized demo failure; check receipt and state before rebroadcast');
+ process.exitCode=1;
+}

@@ -230,3 +230,47 @@ def test_nonce_and_roster_validation(board,direct_vm,direct_alice):
     with direct_vm.expect_revert('Round nonce used'):open_round(board,[direct_alice])
     with direct_vm.expect_revert('Invalid participants'):open_round(board,[direct_alice,direct_alice],nonce='duplicate')
     assert board.get_round(rid)['status']=='OPEN'
+
+
+@pytest.mark.parametrize('tamper',['answer','labels','body'])
+def test_post_consensus_checks_reject_forged_report_before_scoring(board,direct_vm,direct_alice,monkeypatch,tamper):
+    from genlayer import gl
+    rid=open_round(board,[direct_alice])
+    board.commit_probability(rid,seal(board,rid,direct_alice))
+    board.reveal_probability(rid,2000,SALT)
+    mock_evidence(direct_vm)
+    original=gl.vm.run_nondet_unsafe
+    def forged(observe,validator):
+        report=original(observe,validator)
+        if tamper=='answer':report['answer']='YES'
+        elif tamper=='labels':report['labels']=['SUPPORT','REFUTE']
+        else:report['sources'][0]['body']='substitution'
+        return report
+    monkeypatch.setattr(gl.vm,'run_nondet_unsafe',forged)
+    with direct_vm.expect_revert('Invalid outcome report'):board.resolve(rid)
+    assert board.get_round(rid)['status']=='OPEN'
+    assert stats_for(board,direct_alice,direct_alice)['scored']==0
+
+
+def test_commitment_domain_separation():
+    data=['contract','round','participant',2000,SALT]
+    expected=NS['probability_commitment'](*data)
+    for index in range(3):
+        other=list(data);other[index]+='other'
+        assert NS['probability_commitment'](*other)!=expected
+
+
+@pytest.mark.parametrize('raw',[{}, {'labels':[]}, {'labels':['REFUTE',True]},
+    {'labels':['REFUTE','REFUTE'],'answer':'YES'}, {'labels':['refute','refute']}])
+def test_malformed_model_output_never_finalizes(board,direct_vm,direct_alice,raw):
+    rid=open_round(board,[direct_alice])
+    board.commit_probability(rid,seal(board,rid,direct_alice))
+    board.reveal_probability(rid,2000,SALT)
+    mock_evidence(direct_vm)
+    direct_vm.clear_mocks()
+    direct_vm.mock_web(r'.*/archive-policy\.txt',{'status':200,'body':FIRST})
+    direct_vm.mock_web(r'.*/archive-faq\.txt',{'status':200,'body':SECOND})
+    direct_vm.mock_llm(r'(?s).*SEALED BELIEF OUTCOME.*',json.dumps(raw))
+    with direct_vm.expect_revert('Invalid outcome labels'):board.resolve(rid)
+    assert board.get_round(rid)['status']=='OPEN'
+    assert stats_for(board,direct_alice,direct_alice)['scored']==0
