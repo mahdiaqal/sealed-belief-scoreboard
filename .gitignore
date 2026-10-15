@@ -1,0 +1,14 @@
+.env
+.env.*
+*.key
+*.pem
+*keystore*
+node_modules/
+.npm-cache/
+.venv/
+__pycache__/
+.pytest_cache/
+.gltest_cache/
+demo-secrets.json
+*.raw-receipt.json
+artifacts/

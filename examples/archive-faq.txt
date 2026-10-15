@@ -1,0 +1,2 @@
+Demonstration archive FAQ, revision 1.
+May I use a script to download the entire archive without contacting the operator first? No. Obtain written approval before running automated bulk downloads. Ordinary manual browsing is allowed; this exception does not authorize automated collection copying.

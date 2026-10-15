@@ -1,0 +1,2 @@
+Demonstration archive access policy, revision 1.
+Individual visitors may read public catalogue pages manually. Automated bulk downloading is not permitted without prior written approval from the archive operator. A public page URL is not a bulk-download licence. Permission for manual reading does not extend to scripts that copy the collection.
